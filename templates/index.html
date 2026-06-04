@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>CyberSim Platform</title>
+
+    <!-- basic styling -->
+    <style>
+
+        body {
+            font-family: Arial;
+            margin: 40px;
+            background-color: #f4f6f8;
+            color: #222;
+        }
+
+        h1 {
+            color: #1a202c;
+        }
+
+        h2 {
+            color: #2d3748;
+        }
+
+        .box {
+            background: white;
+            border: 1px solid #dcdcdc;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+
+        .form-box {
+            background: white;
+            border: 1px solid #dcdcdc;
+            padding: 25px;
+            width: 520px;
+            border-radius: 10px;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            margin-bottom: 18px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 12px 22px;
+            background-color: #2b6cb0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:hover {
+            background-color: #1f4f85;
+        }
+
+        .metric {
+            margin-bottom: 10px;
+        }
+
+        img {
+            margin-top: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- page title -->
+<h1>CyberSim Cyber Defense Platform</h1>
+
+<!-- short project explanation -->
+<p>
+    Simulates cyber-attacks, malware propagation,
+    AI-driven detection systems, and SOC defense strategies
+    across scalable enterprise networks.
+</p>
+
+<!-- simulation configuration form -->
+<div class="form-box">
+
+<form method="POST">
+
+    <!-- scenario selection -->
+    <h3>Attack Scenario</h3>
+
+    <select name="scenario">
+
+        <option value="baseline"
+        {% if selected_scenario == "baseline" %}selected{% endif %}>
+            Malware Spread (Baseline)
+        </option>
+
+        <option value="no_defense"
+        {% if selected_scenario == "no_defense" %}selected{% endif %}>
+            No Defense Scenario
+        </option>
+
+        <option value="advanced"
+        {% if selected_scenario == "advanced" %}selected{% endif %}>
+            Advanced Multi-Attack
+        </option>
+
+    </select>
+
+    <!-- defense strategy -->
+    <h3>Defense Strategy</h3>
+
+    <select name="defense">
+
+        <option value="none"
+        {% if selected_defense == "none" %}selected{% endif %}>
+            Monitoring Only
+        </option>
+
+        <option value="patch"
+        {% if selected_defense == "patch" %}selected{% endif %}>
+            Automated Patching
+        </option>
+
+        <option value="quarantine"
+        {% if selected_defense == "quarantine" %}selected{% endif %}>
+            Network Isolation
+        </option>
+
+        <option value="hybrid"
+        {% if selected_defense == "hybrid" %}selected{% endif %}>
+            Adaptive AI Defense
+        </option>
+
+    </select>
+
+    <!-- network size -->
+    <h3>Network Size</h3>
+
+    <input
+        type="number"
+        name="network_size"
+        min="10"
+        max="200"
+        value="{{ selected_network_size }}"
+        required
+    >
+
+    <!-- launch simulation -->
+    <button type="submit">
+
+        Launch Simulation
+
+    </button>
+
+</form>
+
+</div>
+
+<!-- show results only after simulation -->
+{% if result %}
+
+<!-- overview -->
+<div class="box">
+
+    <h2>Simulation Overview</h2>
+
+    <p>
+
+        <b>Attack:</b> {{ result.attack }}
+
+        |
+
+        <b>Nodes:</b> {{ result.nodes }}
+
+        |
+
+        <b>Peak Infection:</b> {{ result.peak }}
+
+        |
+
+        <b>Outcome:</b> {{ result.outcome }}
+
+    </p>
+
+</div>
+
+<!-- final network state -->
+<div class="box">
+
+    <h2>Final Network State</h2>
+
+    <div class="metric">
+        <b>Infected:</b> {{ result.infected }}
+    </div>
+
+    <div class="metric">
+        <b>Quarantined:</b> {{ result.quarantined }}
+    </div>
+
+    <div class="metric">
+        <b>Patched:</b> {{ result.patched }}
+    </div>
+
+    <div class="metric">
+        <b>Clean:</b> {{ result.clean }}
+    </div>
+
+    <div class="metric">
+        <b>Risk Score:</b> {{ result.risk }}
+    </div>
+
+</div>
+
+<!-- detection metrics -->
+<div class="box">
+
+    <h2>Detection Metrics</h2>
+
+    <div class="metric">
+        <b>Events Analyzed:</b>
+        {{ result.metrics.events_analyzed }}
+    </div>
+
+    <div class="metric">
+        <b>Malicious:</b>
+        {{ result.metrics.malicious }}
+    </div>
+
+    <div class="metric">
+        <b>Suspicious:</b>
+        {{ result.metrics.suspicious }}
+    </div>
+
+    <div class="metric">
+        <b>Harmless:</b>
+        {{ result.metrics.harmless }}
+    </div>
+
+    <div class="metric">
+        <b>Quarantined:</b>
+        {{ result.metrics.quarantined }}
+    </div>
+
+    <div class="metric">
+        <b>Investigated:</b>
+        {{ result.metrics.investigated }}
+    </div>
+
+</div>
+
+<!-- ai scoring -->
+<div class="box">
+
+    <h2>AI Security Performance</h2>
+
+    <div class="metric">
+        <b>Security Score:</b> {{ result.score }}
+    </div>
+
+    <div class="metric">
+        <b>Grade:</b> {{ result.grade }}
+    </div>
+
+</div>
+
+<!-- infection graph -->
+<div class="box">
+
+    <h2>Threat Visualization</h2>
+
+    <img
+        src="{{ url_for('static', filename='infection_curve.png') }}"
+        width="750"
+    >
+
+</div>
+
+<!-- risk graph -->
+<div class="box">
+
+    <h2>Risk Evolution</h2>
+
+    <img
+        src="{{ url_for('static', filename='risk_curve.png') }}"
+        width="750"
+    >
+
+</div>
+
+{% endif %}
+
+</body>
+
+</html>
